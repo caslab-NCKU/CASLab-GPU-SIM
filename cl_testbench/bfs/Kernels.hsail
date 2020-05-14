@@ -1,0 +1,121 @@
+
+prog kernel &__OpenCL_BFS_1_kernel(
+	kernarg_u64 %g_graph_nodes,
+	kernarg_u64 %g_graph_edges,
+	kernarg_u64 %g_graph_mask,
+	kernarg_u64 %g_updating_graph_mask,
+	kernarg_u64 %g_graph_visited,
+	kernarg_u64 %g_cost,
+	kernarg_u32 %no_of_nodes)
+{
+@__OpenCL_BFS_1_kernel_entry:
+	// BB#0:
+	workitemabsid_u32	$s20, 0;
+	cvt_u64_u32	$d0, $s20;
+	mov_u64	$d1, 0;
+	add_u64	$d0, $d0, $d1;
+	cvt_u32_u64	$s20, $d0;
+	ld_kernarg_align(4)_width(all)_u32	$s21, [%no_of_nodes];
+	cmp_ge_b1_s32	$c0, $s20, $s21;
+	cbr_b1	$c0, @BB0_7;
+	// BB#1:
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_graph_mask];
+	cvt_s64_s32	$d5, $s20;
+	add_u64	$d3, $d0, $d5;
+	ld_u8	$s20, [$d3];
+	cmp_eq_b1_s32	$c0, $s20, 0;
+	cbr_b1	$c0, @BB0_7;
+	// BB#2:
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_cost];
+	ld_kernarg_align(8)_width(all)_u64	$d1, [%g_graph_visited];
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%g_updating_graph_mask];
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_nodes];
+	mov_u32	$s16, 0;
+	st_u8	$s16, [$d3];
+	shl_u64	$d3, $d5, 3;
+	add_u64	$d3, $d4, $d3;
+	ld_align(4)_u32	$s20, [$d3+4];
+	cmp_lt_b1_s32	$c0, $s20, 1;
+	cbr_b1	$c0, @BB0_7;
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_edges];
+	ld_align(4)_u32	$s21, [$d3];
+	cvt_s64_s32	$d6, $s21;
+	shl_u64	$d6, $d6, 2;
+	add_u64	$d4, $d4, $d6;
+	shl_u64	$d5, $d5, 2;
+	add_u64	$d5, $d0, $d5;
+	mov_b32	$s22, $s21;
+@BB0_4:
+	ld_align(4)_u32	$s23, [$d4];
+	cvt_s64_s32	$d6, $s23;
+	add_u64	$d7, $d1, $d6;
+	ld_u8	$s23, [$d7];
+	cmp_ne_b1_s32	$c0, $s23, 0;
+	cbr_b1	$c0, @BB0_6;
+	// BB#5:
+	shl_u64	$d7, $d6, 2;
+	add_u64	$d7, $d0, $d7;
+	ld_align(4)_u32	$s20, [$d5];
+	add_u32	$s20, $s20, 1;
+	st_align(4)_u32	$s20, [$d7];
+	add_u64	$d6, $d2, $d6;
+	mov_u32	$s16, 1;
+	st_u8	$s16, [$d6];
+	//ld_v2_align(4)_u32	($s21, $s20), [$d3];
+	ld_align(4)_u32	$s21, [$d3];
+	ld_align(4)_u32	$s20, [$d3+4];
+@BB0_6:
+	add_u32	$s23, $s21, $s20;
+	add_u64	$d4, $d4, 4;
+	add_u32	$s22, $s22, 1;
+	cmp_lt_b1_s32	$c0, $s22, $s23;
+	cbr_b1	$c0, @BB0_4;
+
+@BB0_7:
+	// %.loopexit
+	exit;
+};
+
+prog kernel &__OpenCL_BFS_2_kernel(
+	kernarg_u64 %g_graph_mask,
+	kernarg_u64 %g_updating_graph_mask,
+	kernarg_u64 %g_graph_visited,
+	kernarg_u64 %g_over,
+	kernarg_u32 %no_of_nodes)
+{
+
+@__OpenCL_BFS_2_kernel_entry:
+	// BB#0:
+	workitemabsid_u32	$s20, 0;
+	cvt_u64_u32	$d0, $s20;
+	mov_u64	$d1, 0;
+	add_u64	$d0, $d0, $d1;
+	cvt_u32_u64	$s20, $d0;
+	ld_kernarg_align(4)_width(all)_u32	$s21, [%no_of_nodes];
+	cmp_ge_b1_s32	$c0, $s20, $s21;
+	cbr_b1	$c0, @BB1_3;
+	// BB#1:
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_updating_graph_mask];
+	cvt_s64_s32	$d1, $s20;
+	add_u64	$d0, $d0, $d1;
+	ld_u8	$s20, [$d0];
+	cmp_eq_b1_s32	$c0, $s20, 0;
+	cbr_b1	$c0, @BB1_3;
+	// BB#2:
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_mask];
+	ld_kernarg_align(8)_width(all)_u64	$d3, [%g_graph_visited];
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%g_over];
+	add_u64	$d4, $d4, $d1;
+	mov_b32	$s10,	1;
+	st_u8	$s10, [$d4];
+	add_u64	$d1, $d3, $d1;
+	mov_b32	$s12,	1;
+	st_u8	$s12, [$d1];
+	mov_b32	$s14,	1;
+	st_u8	$s14, [$d2];
+	mov_b32	$s16,	0;
+	st_u8	$s16, [$d0];
+
+@BB1_3:
+	exit;
+};

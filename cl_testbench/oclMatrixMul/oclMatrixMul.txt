@@ -1,0 +1,14 @@
+./oclMatrixMul Starting...
+
+WARNING: NVIDIA OpenCL platform not found - defaulting to first platform!
+
+Device 0: iGPUSim
+
+Using Matrix Sizes: A(8 x 16), B(8 x 8), C(8 x 16)
+
+Running Computations on 1 - 1 GPU's...
+
+Comparing results with CPU computation... 
+
+PASSED
+

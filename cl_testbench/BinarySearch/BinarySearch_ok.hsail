@@ -1,0 +1,34 @@
+prog kernel &__OpenCL_binarySearch_kernel(
+	kernarg_u64 %outputArray,
+	kernarg_u64 %sortedArray,
+	kernarg_u32 %findMe)
+{
+
+@__OpenCL_binarySearch_kernel_entry:
+	// BB#0:
+	workitemabsid_u32	$s0, 0;
+	cvt_u64_u32	$d0, $s0;
+	//ld_kernarg_align(8)_width(all)_u64	$d1, [%__global_offset_0];
+	//add_u64	$d0, $d0, $d1;
+	mov_b64 $d3, 4294967295;
+	and_b64	$d1, $d0, $d3;
+	shl_u64	$d1, $d1, 3;
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%sortedArray];
+	add_u64	$d1, $d2, $d1;
+	//ld_v2_global_align(8)_u32	($s0, $s1), [$d1];
+	ld_global_align(8)_u32	$s0, [$d1];
+	ld_global_align(8)_u32	$s1, [$d1+4];
+	ld_kernarg_align(4)_width(all)_u32	$s2, [%findMe];
+	cmp_lt_b1_u32	$c0, $s1, $s2;
+	cmp_gt_b1_u32	$c1, $s0, $s2;
+	or_b1	$c0, $c1, $c0;
+	mov_b32 $s3, 1;
+	cbr_b1	$c0, @BB0_2;
+	// BB#1:
+	ld_kernarg_align(8)_width(all)_u64	$d1, [%outputArray];
+	cvt_u32_u64	$s0, $d0;
+	st_global_align(16)_u32	$s0, [$d1];
+	st_global_align(4)_u32	$s3, [$d1+12];
+@BB0_2:
+	exit;
+};

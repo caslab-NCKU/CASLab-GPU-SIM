@@ -1,0 +1,41 @@
+prog kernel &__OpenCL_NearestNeighbor_kernel(
+	kernarg_u64 %d_locations,
+	kernarg_u64 %d_distances,
+	kernarg_u32 %numRecords,
+	kernarg_u32 %lat,
+	kernarg_u32 %lng)
+{
+
+@__OpenCL_NearestNeighbor_kernel_entry:
+	// BB#0:
+	workitemabsid_u32	$s0, 0;
+	cvt_u64_u32	$d0, $s0;
+	mov_b64	$d1, 0;
+	add_u64	$d0, $d0, $d1;
+	cvt_u32_u64	$s0, $d0;
+	ld_kernarg_align(4)_width(all)_u32	$s1, [%numRecords];
+	cmp_ge_b1_s32	$c0, $s0, $s1;
+	cbr_b1	$c0, @BB0_2;
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%d_locations];
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%d_distances];
+	ld_kernarg_align(4)_width(all)_f32	$s1, [%lat];
+	ld_kernarg_align(4)_width(all)_f32	$s2, [%lng];
+	cvt_s64_s32	$d1, $s0;
+	shl_u64	$d3, $d1, 3;
+	add_u64	$d2, $d2, $d3;
+	//ld_v2_global_align(4)_f32	($s0, $s3), [$d2];
+	ld_global_align(4)_f32 $s0, [$d2];
+	ld_global_align(4)_f32 $s3, [$d2+4];
+	sub_ftz_f32	$s2, $s2, $s3;
+	mul_ftz_f32	$s2, $s2, $s2;
+	sub_ftz_f32	$s0, $s1, $s0;
+	mul_ftz_f32	$s0, $s0, $s0;
+	add_ftz_f32	$s0, $s0, $s2;
+	nsqrt_f32	$s0, $s0;
+	shl_u64	$d1, $d1, 2;
+	add_u64	$d0, $d0, $d1;
+	st_global_align(4)_f32	$s0, [$d0];
+
+@BB0_2:
+	exit;
+};

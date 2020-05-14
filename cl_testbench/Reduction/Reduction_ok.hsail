@@ -1,0 +1,113 @@
+prog kernel &__OpenCL_reduce_kernel(
+	kernarg_u64 %input,	
+	kernarg_u64 %output,	
+	kernarg_u64 %sdata)
+{
+
+@__OpenCL_reduce_kernel_entry:
+	// BB#0:
+	workitemabsid_u32	$s0,0;
+	cvt_u64_u32	$d0,$s0;
+	//ld_kernarg_align(8)_width(all)_u64	$d1,[%input];
+	//add_u64	$d0,$d0,$d1;
+	mov_b64	$d1, 0;	
+	cvt_u32_u64	$s0,$d0;
+	shl_u32	$s0,$s0,1;
+	cvt_u64_u32	$d0,$s0;
+	shl_u64	$d1,$d0,4;
+	workitemid_u32	$s0,0;
+	cvt_u64_u32	$d0,$s0;
+	currentworkgroupsize_u32	$s1,0;
+	ld_kernarg_align(8)_width(all)_u64	$d2,[%input];
+	add_u64	$d2,$d2,$d1;
+	shr_u32	$s1,$s1,1;
+	shl_u64	$d1,$d0,4;
+	ld_kernarg_align(8)_width(all)_u64	$d0,[%sdata];
+	add_u64	$d1,$d0,$d1;
+	cvt_u32_u64	$s2,$d1;
+	//ld_v4_global_align(16)_u32	($s6, $s7, $s4, $s3), [$d2];
+	ld_global_align(16)_u32	$s6,[$d2];
+	ld_global_align(16)_u32	$s7,[$d2+4];
+	ld_global_align(16)_u32	$s4,[$d2+8];
+	ld_global_align(16)_u32	$s3,[$d2+12];		
+	//ld_v4_global_align(16)_u32	($s10, $s9, $s8, $s5), [$d2+16];
+	ld_global_align(16)_u32	$s10,[$d2+16];
+	ld_global_align(16)_u32	$s9,[$d2+20];
+	ld_global_align(16)_u32	$s8,[$d2+24];
+	ld_global_align(16)_u32	$s5,[$d2+28];
+	add_u32	$s6,$s6,$s10;
+	add_u32	$s7,$s7,$s9;
+	add_u32	$s4,$s4,$s8;
+	add_u32	$s3,$s3,$s5;
+	//st_v4_group_align(16)_u32	($s6, $s7, $s4, $s3), [$s2];
+	st_group_align(16)_u32	$s6,[$s2];
+	st_group_align(16)_u32	$s7,[$s2+4];
+	st_group_align(16)_u32	$s4,[$s2+8];
+	st_group_align(16)_u32	$s3,[$s2+12];
+	barrier;
+	cmp_eq_b1_s32	$c0,$s1,0;
+	cbr_b1	$c0,@BB0_4;
+
+@BB0_1:
+	// %.lr.ph
+	cmp_ge_b1_u32	$c0,$s0,$s1;
+	cbr_b1	$c0,@BB0_3;
+	// BB#2:
+	cvt_u32_u64	$s2,$d1;
+	cvt_u32_u64	$s7,$d1;
+	//ld_v4_group_align(16)_u32	($s6, $s5, $s4, $s3), [$s7];
+	ld_group_align(16)_u32	$s6,[$s7];
+	ld_group_align(16)_u32	$s5,[$s7+4];
+	ld_group_align(16)_u32	$s4,[$s7+8];
+	ld_group_align(16)_u32	$s3,[$s7+12];
+	add_u32	$s7,$s1,$s0;
+	cvt_u64_u32	$d2,$s7;
+	shl_u64	$d2,$d2,4;
+	add_u64	$d2,$d0,$d2;
+	cvt_u32_u64	$s11,$d2;
+	//ld_v4_group_align(16)_u32	($s10, $s9, $s8, $s7), [$s11];
+	ld_group_align(16)_u32	$s10,[$s11];
+	ld_group_align(16)_u32	$s9,[$s11+4];
+	ld_group_align(16)_u32	$s8,[$s11+8];
+	ld_group_align(16)_u32	$s7,[$s11+12];
+	add_u32	$s6,$s6,$s10;
+	add_u32	$s5,$s5,$s9;
+	add_u32	$s4,$s4,$s8;
+	add_u32	$s3,$s3,$s7;
+	//st_v4_group_align(16)_u32	($s6,$s5,$s4,$s3),[$s2];
+	st_group_align(16)_u32	$s6,[$s2];
+	st_group_align(16)_u32	$s5,[$s2+4];
+	st_group_align(16)_u32	$s4,[$s2+8];
+	st_group_align(16)_u32	$s3,[$s2+12];
+
+@BB0_3:
+	barrier;
+	shr_u32	$s1,$s1,1;
+	cmp_ne_b1_s32	$c0,$s1,0;
+	cbr_b1	$c0,@BB0_1;
+
+@BB0_4:
+	// %._crit_edge
+	cmp_ne_b1_s32	$c0,$s0,0;
+	cbr_b1	$c0,@BB0_6;
+	// BB#5:
+	workgroupid_u32	$s0,0;
+	cvt_u64_u32	$d1,$s0;
+	cvt_u32_u64	$s0,$d0;
+	ld_kernarg_align(8)_width(all)_u64	$d0,[%output];
+	shl_u64	$d1,$d1,4;
+	add_u64	$d0,$d0,$d1;
+	//ld_v4_group_align(16)_width(WAVESIZE)_u32	($s1, $s2, $s3, $s4), [$s0];
+	ld_group_align(16)_u32	$s1,[$s0];
+	ld_group_align(16)_u32	$s2,[$s0+4];
+	ld_group_align(16)_u32	$s3,[$s0+8];
+	ld_group_align(16)_u32	$s4,[$s0+12];
+	//st_v4_global_align(16)_u32	($s1, $s2, $s3, $s4), [$d0];
+	st_global_align(16)_u32	$s1,[$d0];
+	st_global_align(16)_u32	$s2,[$d0+4];
+	st_global_align(16)_u32	$s3,[$d0+8];
+	st_global_align(16)_u32	$s4,[$d0+12];
+
+@BB0_6:
+	exit;
+};

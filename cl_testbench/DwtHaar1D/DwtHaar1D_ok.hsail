@@ -1,0 +1,129 @@
+prog kernel &__OpenCL_dwtHaar1D_kernel(
+	kernarg_u64 %inSignal,	
+	kernarg_u64 %coefsSignal,	
+	kernarg_u64 %AverageSignal,	
+	kernarg_u64 %sharedArray,	
+	kernarg_u32 %tLevels,	
+	kernarg_u32 %signalLength,	
+	kernarg_u32 %levelsDone,	
+	kernarg_u32 %mLevels)
+{
+	@__OpenCL_dwtHaar1D_kernel_entry:
+	// BB#0:
+	workitemid_u32	$s0,0;
+	cvt_u64_u32	$d1,$s0;
+	currentworkgroupsize_u32	$s1,0;
+	cvt_u64_u32	$d2,$s1;
+	add_u64	$d5,$d2,$d1;
+	workgroupid_u32	$s1,0;
+	cvt_u64_u32	$d0,$s1;
+	mul_u64	$d2,$d0,$d2;
+	shl_u64	$d2,$d2,1;
+	add_u64	$d3,$d5,$d2;
+	add_u64	$d2,$d2,$d1;
+	shl_u64	$d3,$d3,2;
+	shl_u64	$d2,$d2,2;
+	ld_kernarg_align(8)_width(all)_u64	$d6, [%inSignal];
+	add_u64	$d4,$d6,$d2;
+	ld_kernarg_align(4)_width(all)_u32	$s1, [%mLevels];
+	ld_kernarg_align(4)_width(all)_u32	$s3, [%signalLength];
+	ld_kernarg_align(4)_width(all)_u32	$s2, [%tLevels];
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%sharedArray];
+	add_u64	$d6,$d6,$d3;
+	ld_kernarg_align(8)_width(all)_u64	$d3, [%coefsSignal];
+	ld_global_align(4)_f32	$s5,[$d4];
+	ld_kernarg_align(4)_width(all)_u32	$s6, [%levelsDone];
+	ld_global_align(4)_f32	$s4,[$d6];
+	cmp_ne_b1_s32	$c0,$s6,0;
+	cbr_b1	$c0,@BB0_2;
+	// BB#1:
+	cvt_near_f32_u32	$s6,$s3;
+	nrsqrt_f32	$s6,$s6;
+	mul_ftz_f32	$s4,$s4,$s6;
+	mul_ftz_f32	$s5,$s5,$s6;
+
+@BB0_2:
+	shl_u64	$d4,$d1,2;
+	add_u64	$d4,$d2,$d4;
+	cvt_u32_u64	$s6,$d4;
+	st_group_align(4)_f32	$s5,[$s6];
+	shl_u64	$d5,$d5,2;
+	add_u64	$d5,$d2,$d5;
+	cvt_u32_u64	$s5,$d5;
+	st_group_align(4)_f32	$s4,[$s5];
+	min_u32	$s4,$s2,$s1;
+	barrier;
+	cmp_eq_b1_s32	$c0,$s4,0;
+	cbr_b1	$c0,@BB0_9;
+	// BB#3:                                // %.lr.ph
+	shl_u32	$s4,1,$s4;
+	shr_u32	$s5,$s4,31;
+	add_u32	$s4,$s4,$s5;
+	not_b32	$s2,$s2;
+	not_b32	$s1,$s1;
+	max_u32	$s1,$s1,$s2;
+	not_b32	$s1,$s1;
+	shr_s32	$s2,$s4,1;
+	shr_u32	$s3,$s3,1;
+	shl_u64	$d6,$d1,1;
+	or_b64	$d5,$d6,1;
+	shl_u64	$d5,$d5,2;
+	add_u64	$d5,$d2,$d5;
+	shl_u64	$d6,$d6,2;
+	add_u64	$d6,$d2,$d6;
+
+@BB0_4:
+	cvt_u64_u32	$d7,$s2;
+	cmp_ge_b1_u64	$c0,$d1,$d7;
+	cbr_b1	$c0,@BB0_6;
+	// BB#5:
+	cvt_u32_u64	$s4,$d5;
+	ld_group_align(4)_f32	$s4,[$s4];
+	cvt_u32_u64	$s5,$d6;
+	ld_group_align(4)_f32	$s5,[$s5];
+
+@BB0_6:
+	barrier;
+	cbr_b1	$c0,@BB0_8;
+	// BB#7:
+	mad_u64	$d7,$d7,$d0,$d1;
+	cvt_u32_u64	$s6,$d4;
+	add_ftz_f32	$s7,$s5,$s4;
+	mov_b32	$s8,0x3f3504f3;
+	mul_ftz_f32	$s7,$s7,$s8;
+	cvt_u64_u32	$d8,$s3;
+	st_group_align(4)_f32	$s7,[$s6];
+	add_u64	$d7,$d7,$d8;
+	mov_b64	$d9,4294967295;
+	and_b64	$d7,$d7,$d9;
+	shl_u64	$d7,$d7,2;
+	add_u64	$d7,$d3,$d7;
+	sub_ftz_f32	$s6,$s5,$s4;
+	mul_ftz_f32	$s6,$s6,$s8;
+	st_global_align(4)_f32	$s6,[$d7];
+	shr_u32	$s3,$s3,1;
+
+@BB0_8:
+	barrier;
+	shr_u32	$s2,$s2,1;
+	mov_b32 $s9, 0xFFFFFFFF;
+	add_s32	$s1,$s1,$s9;
+	cmp_ne_b1_s32	$c0,$s1,0;
+	cbr_b1	$c0,@BB0_4;
+
+
+@BB0_9:
+	// %._crit_edge
+	cmp_ne_b1_s32	$c0,$s0,0;
+	cbr_b1	$c0,@BB0_11;
+	// BB#10:
+	cvt_u32_u64	$s0,$d2;
+	ld_kernarg_align(8)_width(all)_u64	$d1,[%AverageSignal];
+	shl_u64	$d0,$d0,2;
+	add_u64	$d0,$d1,$d0;
+	ld_group_align(4)_f32	$s0,[$s0];
+	st_global_align(4)_f32	$s0,[$d0];
+
+@BB0_11:
+	exit;
+};

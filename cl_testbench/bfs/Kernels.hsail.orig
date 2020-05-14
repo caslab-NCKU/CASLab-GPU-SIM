@@ -1,0 +1,151 @@
+
+prog kernel &__OpenCL_BFS_1_kernel(
+	kernarg_u64 %g_graph_nodes,
+	kernarg_u64 %g_graph_edges,
+	kernarg_u64 %g_graph_mask,
+	kernarg_u64 %g_updating_graph_mask,
+	kernarg_u64 %g_graph_visited,
+	kernarg_u64 %g_cost,
+	kernarg_u32 %no_of_nodes)
+{
+@__OpenCL_BFS_1_kernel_entry:
+	// BB#0:                                // %entry
+	mov_b32 $s4, 0;
+	mov_b32 $s5, 1;
+	workitemabsid_u32	$s0, 0;
+	cvt_u64_u32	$d0, $s0;
+	//ld_kernarg_align(8)_width(all)_u64	$d1, [%__global_offset_0];
+	mov_b64 $d1, 0;	
+	add_u64	$d0, $d0, $d1;
+	cvt_u32_u64	$s0, $d0;
+	ld_kernarg_align(4)_width(all)_u32	$s1, [%no_of_nodes];
+	cmp_ge_b1_s32	$c0, $s0, $s1;
+	cbr_b1	$c0, @BB0_7;
+	// BB#1:                                // %land.lhs.true
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_graph_mask];
+	cvt_s64_s32	$d5, $s0;
+	add_u64	$d3, $d0, $d5;
+	//ld_global_u8	$s0, [$d3];
+	ld_global_u32	$s0, [$d3];
+	andi_b32 $s0, $s0, 0xFF;
+	cmp_eq_b1_s32	$c0, $s0, 0;
+	cbr_b1	$c0, @BB0_7;
+	// BB#2:                                // %if.then
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_cost];
+	ld_kernarg_align(8)_width(all)_u64	$d1, [%g_graph_visited];
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%g_updating_graph_mask];
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_nodes];
+	//st_global_u8	$s4, [$d3];
+	mov_b32 $s6, $s4;
+	andi_b32 $s6, $s6, 0xFF;
+	st_global_u32 $s6, [$d3];
+	shl_u64	$d3, $d5, 3;
+	add_u64	$d3, $d4, $d3;
+	ld_global_align(4)_u32	$s0, [$d3+4];
+	cmp_lt_b1_s32	$c0, $s0, 1;
+	cbr_b1	$c0, @BB0_7;
+	// BB#3:                                // %for.body.lr.ph
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_edges];
+	ld_global_align(4)_u32	$s1, [$d3];
+	cvt_s64_s32	$d6, $s1;
+	shl_u64	$d6, $d6, 2;
+	add_u64	$d4, $d4, $d6;
+	shl_u64	$d5, $d5, 2;
+	add_u64	$d5, $d0, $d5;
+	mov_b32	$s2, $s1;
+
+@BB0_4:
+	// %for.body
+	ld_global_align(4)_u32	$s3, [$d4];
+	cvt_s64_s32	$d6, $s3;
+	add_u64	$d7, $d1, $d6;
+	//ld_global_u8	$s3, [$d7];
+	ld_global_u32	$s3, [$d7];
+	andi_u32 $s3, $s3, 0xFF;
+	cmp_ne_b1_s32	$c0, $s3, 0;
+	cbr_b1	$c0, @BB0_6;
+	// BB#5:                                // %if.then19
+	shl_u64	$d7, $d6, 2;
+	add_u64	$d7, $d0, $d7;
+	ld_global_align(4)_u32	$s0, [$d5];
+	add_u32	$s0, $s0, 1;
+	st_global_align(4)_u32	$s0, [$d7];
+	add_u64	$d6, $d2, $d6;
+	//st_global_u8	$s5, [$d6];
+	mov_b32 $s6, $s5;
+	andi_b32 $s6, $s6, 0xFF;
+	st_global_u32 $s6, [$d6];
+	//ld_v2_global_align(4)_u32	($s1, $s0), [$d3];
+	ld_global_align(4)_u32 $s1, [$d3];
+	ld_global_align(4)_u32 $s0, [$d3+4];
+@BB0_6:
+	// %for.inc
+	endbra;
+	add_u32	$s3, $s1, $s0;
+	add_u64	$d4, $d4, 4;
+	add_u32	$s2, $s2, 1;
+	cmp_lt_b1_s32	$c0, $s2, $s3;
+	cbr_b1	$c0, @BB0_4;
+	endbra;
+@BB0_7:
+	endbra;
+	// %if.end27
+	//ret;
+	exit;
+};
+
+prog kernel &__OpenCL_BFS_2_kernel(
+	kernarg_u64 %g_graph_mask,
+	kernarg_u64 %g_updating_graph_mask,
+	kernarg_u64 %g_graph_visited,
+	kernarg_u64 %g_over,
+	kernarg_u32 %no_of_nodes)
+{
+
+@__OpenCL_BFS_2_kernel_entry:
+	// BB#0:                                // %entry
+	mov_b32 $s4, 0;
+	mov_b32 $s5, 1;
+	workitemabsid_u32	$s0, 0;
+	cvt_u64_u32	$d0, $s0;
+	//ld_kernarg_align(8)_width(all)_u64	$d1, [%__global_offset_0];
+	mov_b64 $d1, 0;	
+	add_u64	$d0, $d0, $d1;
+	cvt_u32_u64	$s0, $d0;
+	ld_kernarg_align(4)_width(all)_u32	$s1, [%no_of_nodes];
+	cmp_ge_b1_s32	$c0, $s0, $s1;
+	cbr_b1	$c0, @BB1_3;
+	// BB#1:                                // %land.lhs.true
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%g_updating_graph_mask];
+	cvt_s64_s32	$d1, $s0;
+	add_u64	$d0, $d0, $d1;
+	//ld_global_u8	$s0, [$d0];
+	ld_global_u32	$s0, [$d0];
+	andi_b32 $s0, $s0, 0xFF;
+	cmp_eq_b1_s32	$c0, $s0, 0;
+	cbr_b1	$c0, @BB1_3;
+	// BB#2:                                // %if.then
+	ld_kernarg_align(8)_width(all)_u64	$d4, [%g_graph_mask];
+	ld_kernarg_align(8)_width(all)_u64	$d3, [%g_graph_visited];
+	ld_kernarg_align(8)_width(all)_u64	$d2, [%g_over];
+	add_u64	$d4, $d4, $d1;
+	//st_global_u8	$s5, [$d4];
+	mov_b32 $s6, $s5;
+	andi_b32 $s6, $s6, 0xFF;
+	st_global_u32 $s6, [$d4];
+	add_u64	$d1, $d3, $d1;
+	//st_global_u8	$s5, [$d1];
+	st_global_u32 $s6, [$d1];
+	//st_global_u8	$s5, [$d2];
+	st_global_u32 $s6, [$d2];
+	//st_global_u8	$s4, [$d0];
+	mov_b32 $s6, $s4;
+	andi_b32 $s6, $s6, 0xFF;
+	st_global_u32 $s6, [$d0];
+
+@BB1_3:
+	endbra;
+	// %if.end
+	//ret;
+	exit;
+};

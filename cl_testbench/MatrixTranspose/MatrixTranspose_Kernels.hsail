@@ -1,0 +1,165 @@
+module &_tmp_cloc30923_MatrixTranspose_Kernels_opt_bc:1:0:$full:$large:$default;
+extension "amd:gcn";
+extension "IMAGE";
+
+decl prog function &abort()();
+
+prog kernel &__OpenCL_matrixTranspose_kernel(
+	kernarg_u64 %__global_offset_0,
+	kernarg_u64 %__global_offset_1,
+	kernarg_u64 %__global_offset_2,
+	kernarg_u64 %__printf_buffer,
+	kernarg_u64 %__vqueue_pointer,
+	kernarg_u64 %__aqlwrap_pointer,
+	kernarg_u64 %output,
+	kernarg_u64 %input,
+	kernarg_u64 %block)
+{
+	pragma "AMD RTI", "ARGSTART:__OpenCL_matrixTranspose_kernel";
+	pragma "AMD RTI", "version:3:1:104";
+	pragma "AMD RTI", "device:generic";
+	pragma "AMD RTI", "uniqueid:1024";
+	pragma "AMD RTI", "memory:private:0";
+	pragma "AMD RTI", "memory:region:0";
+	pragma "AMD RTI", "memory:local:0";
+	pragma "AMD RTI", "value:__global_offset_0:u64:1:1:0";
+	pragma "AMD RTI", "value:__global_offset_1:u64:1:1:16";
+	pragma "AMD RTI", "value:__global_offset_2:u64:1:1:32";
+	pragma "AMD RTI", "pointer:__printf_buffer:u8:1:1:48:uav:7:1:RW:0:0:0";
+	pragma "AMD RTI", "value:__vqueue_pointer:u64:1:1:64";
+	pragma "AMD RTI", "value:__aqlwrap_pointer:u64:1:1:80";
+	pragma "AMD RTI", "pointer:output:float:1:1:96:uav:7:16:RW:0:0:0";
+	pragma "AMD RTI", "pointer:input:float:1:1:112:uav:7:16:RW:0:0:0";
+	pragma "AMD RTI", "pointer:block:float:1:1:128:l:7:16:RW:0:0:0";
+	pragma "AMD RTI", "function:1:0";
+	pragma "AMD RTI", "memory:64bitABI";
+	pragma "AMD RTI", "privateid:8";
+	pragma "AMD RTI", "enqueue_kernel:0";
+	pragma "AMD RTI", "kernel_index:0";
+	pragma "AMD RTI", "reflection:0:size_t";
+	pragma "AMD RTI", "reflection:1:size_t";
+	pragma "AMD RTI", "reflection:2:size_t";
+	pragma "AMD RTI", "reflection:3:size_t";
+	pragma "AMD RTI", "reflection:4:size_t";
+	pragma "AMD RTI", "reflection:5:size_t";
+	pragma "AMD RTI", "reflection:6:float4*";
+	pragma "AMD RTI", "reflection:7:float4*";
+	pragma "AMD RTI", "reflection:8:float4*";
+	pragma "AMD RTI", "ARGEND:__OpenCL_matrixTranspose_kernel";
+
+@__OpenCL_matrixTranspose_kernel_entry:
+	// BB#0:
+	workgroupid_u32	$s1, 1;
+	workitemid_u32	$s3, 0;
+	workgroupid_u32	$s2, 0;
+	currentworkgroupsize_u32	$s0, 0;
+	mad_u32	$s4, $s0, $s2, $s3;
+	add_u32	$s1, $s1, $s2;
+	gridgroups_u32	$s5, 0;
+	rem_u32	$s6, $s1, $s5;
+	workitemid_u32	$s5, 1;
+	mad_u32	$s8, $s0, $s6, $s5;
+	gridsize_u32	$s1, 0;
+	shl_u32	$s7, $s1, 2;
+	mad_u32	$s4, $s7, $s8, $s4;
+	mad_u32	$s2, $s0, $s2, $s5;
+	mad_u32	$s6, $s0, $s6, $s3;
+	mad_u32	$s2, $s7, $s2, $s6;
+	add_u32	$s6, $s4, $s1;
+	shl_u32	$s7, $s1, 1;
+	add_u32	$s10, $s4, $s7;
+	mul_u32	$s8, $s3, $s0;
+	shl_u32	$s8, $s8, 2;
+	mul_u32	$s9, $s5, $s0;
+	cvt_u64_u32	$d4, $s10;
+	cvt_u64_u32	$d3, $s6;
+	cvt_s64_s32	$d2, $s4;
+	mad_u32	$s6, $s1, 3, $s4;
+	add_u32	$s7, $s2, $s7;
+	cvt_s64_s32	$d1, $s2;
+	shl_u32	$s4, $s9, 2;
+	add_u32	$s4, $s4, $s3;
+	cvt_s64_s32	$d0, $s4;
+	shl_u64	$d6, $d0, 4;
+	add_u32	$s3, $s8, $s5;
+	shl_u32	$s5, $s0, 1;
+	ld_kernarg_align(8)_width(all)_u64	$d0, [%block];
+	shl_u64	$d11, $d1, 4;
+	cvt_s64_s32	$d5, $s3;
+	mad_u32	$s9, $s0, 3, $s3;
+	add_u32	$s10, $s3, $s5;
+	add_u64	$d1, $d0, $d6;
+	cvt_u32_u64	$s8, $d1;
+	ld_kernarg_align(8)_width(all)_u64	$d1, [%input];
+	cvt_u64_u32	$d10, $s7;
+	cvt_u64_u32	$d8, $s6;
+	shl_u64	$d2, $d2, 4;
+	shl_u64	$d3, $d3, 4;
+	shl_u64	$d4, $d4, 4;
+	cvt_u64_u32	$d7, $s10;
+	cvt_u64_u32	$d9, $s9;
+	shl_u64	$d5, $d5, 4;
+	ld_kernarg_align(8)_width(all)_u64	$d6, [%output];
+	add_u64	$d11, $d1, $d11;
+	ld_v4_global_align(16)_f32	($s6, $s7, $s9, $s10), [$d11];
+	st_v4_group_align(16)_f32	($s6, $s7, $s9, $s10), [$s8];
+	add_u32	$s6, $s2, $s1;
+	cvt_u64_u32	$d11, $s6;
+	shl_u64	$d11, $d11, 4;
+	add_u64	$d11, $d1, $d11;
+	ld_v4_global_align(16)_f32	($s6, $s7, $s8, $s9), [$d11];
+	add_u32	$s10, $s4, $s0;
+	cvt_u64_u32	$d11, $s10;
+	shl_u64	$d11, $d11, 4;
+	add_u64	$d11, $d0, $d11;
+	cvt_u32_u64	$s10, $d11;
+	st_v4_group_align(16)_f32	($s6, $s7, $s8, $s9), [$s10];
+	shl_u64	$d10, $d10, 4;
+	add_u64	$d11, $d1, $d10;
+	mad_u32	$s1, $s1, 3, $s2;
+	cvt_u64_u32	$d10, $s1;
+	add_u32	$s1, $s4, $s5;
+	cvt_u64_u32	$d13, $s1;
+	shl_u64	$d10, $d10, 4;
+	ld_v4_global_align(16)_f32	($s1, $s2, $s5, $s6), [$d11];
+	shl_u64	$d12, $d8, 4;
+	shl_u64	$d13, $d13, 4;
+	mad_u32	$s4, $s0, 3, $s4;
+	cvt_u64_u32	$d8, $s4;
+	shl_u64	$d8, $d8, 4;
+	shl_u64	$d9, $d9, 4;
+	shl_u64	$d11, $d7, 4;
+	add_u32	$s3, $s3, $s0;
+	add_u64	$d7, $d0, $d13;
+	cvt_u32_u64	$s4, $d7;
+	add_u64	$d7, $d6, $d12;
+	add_u64	$d4, $d6, $d4;
+	add_u64	$d3, $d6, $d3;
+	add_u64	$d2, $d6, $d2;
+	add_u64	$d5, $d0, $d5;
+	cvt_u32_u64	$s0, $d5;
+	st_v4_group_align(16)_f32	($s1, $s2, $s5, $s6), [$s4];
+	add_u64	$d1, $d1, $d10;
+	cvt_u64_u32	$d5, $s3;
+	shl_u64	$d5, $d5, 4;
+	add_u64	$d5, $d0, $d5;
+	cvt_u32_u64	$s1, $d5;
+	add_u64	$d5, $d0, $d11;
+	cvt_u32_u64	$s2, $d5;
+	add_u64	$d5, $d0, $d9;
+	cvt_u32_u64	$s5, $d5;
+	add_u64	$d0, $d0, $d8;
+	cvt_u32_u64	$s3, $d0;
+	ld_v4_global_align(16)_f32	($s4, $s6, $s7, $s8), [$d1];
+	st_v4_group_align(16)_f32	($s4, $s6, $s7, $s8), [$s3];
+	barrier;
+	ld_v4_group_align(16)_f32	($s8, $s6, $s4, $s3), [$s5];
+	ld_v4_group_align(16)_f32	($s11, $s9, $s7, $s5), [$s2];
+	ld_v4_group_align(16)_f32	($s14, $s12, $s10, $s2), [$s1];
+	ld_v4_group_align(16)_f32	($s16, $s15, $s13, $s1), [$s0];
+	st_v4_global_align(16)_f32	($s16, $s14, $s11, $s8), [$d2];
+	st_v4_global_align(16)_f32	($s15, $s12, $s9, $s6), [$d3];
+	st_v4_global_align(16)_f32	($s13, $s10, $s7, $s4), [$d4];
+	st_v4_global_align(16)_f32	($s1, $s2, $s5, $s3), [$d7];
+	ret;
+};
