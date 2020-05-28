@@ -1,12 +1,12 @@
 # SystemC XGPU Simulator User Guide 
 
-## CAS-GPU is based on the HASIL (Heterogeneous System Architecture Intermediate Language) specification developed by the HSA foundation.
+## XGPU is based on the HASIL (Heterogeneous System Architecture Intermediate Language) specification developed by the HSA foundation.
 
 This project involves:
-1. A CASLab-GPU Sim, which is a configurable OpenCL HSAIL GPU simulator in systemC supporting OpenCL. 
-2. The OpenCL compiler for CASLab-GPU based on LLVM infrastructure. Users can easily employ the simulator by OpenCL code. The compiler optimizes and translates OpenCL code to CAS-GPU machine code.
+1. A XGPU Sim, which is a configurable OpenCL HSAIL GPU simulator in systemC supporting OpenCL. 
+2. The OpenCL compiler for XGPU based on LLVM infrastructure. Users can easily employ the simulator by OpenCL code. The compiler optimizes and translates OpenCL code to CAS-GPU machine code.
 
-The project is developed by CASLab members since 20xx with lots of effort dedicated.
+The project is developed by CASLab members since 2013 with lots of effort dedicated.
 
 ## Prerequistes
 - Libraries (to be informed.)
