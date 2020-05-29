@@ -1,12 +1,13 @@
-# SystemC XGPU Simulator User Guide 
+# SystemC CASLab-GPU Simulator User Guide 
 
-## XGPU is based on the HASIL (Heterogeneous System Architecture Intermediate Language) specification developed by the HSA foundation.
+## CASLab-GPU ISA is a lite version of the HSAIL (Heterogeneous System Architecture Intermediate Language) specification developed by the HSA foundation.
 
-This project involves:
-1. A XGPU Sim, which is a configurable OpenCL HSAIL GPU simulator in systemC supporting OpenCL. 
-2. The OpenCL compiler for XGPU based on LLVM infrastructure. Users can easily employ the simulator by OpenCL code. The compiler optimizes and translates OpenCL code to CAS-GPU machine code.
+The CASLab GPU project involves:
 
-The project is developed by CASLab members since 2013 with lots of effort dedicated.
+1. A CASLab-GPU Sim, which is a configurable OpenCL HSAIL GPU simulator in SystemC supporting OpenCL and TensorFlow CNN APIs. 
+2. The CASLab GPU OpenCL compiler, which is based on the LLVM framework. The compiler optimizes and translates OpenCL programs or Python TensorFlow CNN model to CASLab-GPU machine code.
+
+The project is developed by the CASLab members, NCKU EE,  since 2013 with lots of dedicated efforts.
 
 ## Prerequistes
 - Libraries (to be informed.)
@@ -15,7 +16,7 @@ The project is developed by CASLab members since 2013 with lots of effort dedica
 - gcc, g++ version should be more than 5.
 
 ## How to run
-0-1.Requirements for XGPUSIM
+0-1.Requirements for CASLab-GPUSIM
 ```
     sudo apt-get install cmake libelf-dev zlib1g-dev libglu1-mesa-dev ocl-icd-opencl-dev
 ```
