@@ -5,7 +5,7 @@ if ! [ -n ${TMP_DIR} ]; then
   exit 1
 fi
 
-EXE=./test
+EXE=./CASLab-GPU
 LOG_DIR=${TMP_DIR}/exec_history
 
 EnableLog=1

@@ -54,7 +54,7 @@ The project is developed by the CASLab members, NCKU EE,  since 2013 with lots o
 - If simulator would only be run once and not logging , do
 
 ```
-    ./gpu
+    ./CASLab-GPU
 ```
 
 - Otherwise, Use script to start the simuatlor
